@@ -18,7 +18,7 @@ extern "C" int _write(int32_t file, uint8_t *ptr, int32_t len) {
 #else
 int _write(int32_t file, uint8_t *ptr, int32_t len) {
 #endif
-    if(HAL_UART_Transmit(&huart2, ptr, len, len) == HAL_OK) return len;
+    if(HAL_UART_Transmit(&huart1, ptr, len, len) == HAL_OK) return len;
     else
         return 0;
 }
