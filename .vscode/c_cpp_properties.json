@@ -1,0 +1,13 @@
+{
+  "configurations": [
+    {
+      "name": "STM32",
+      "includePath": ["${workspaceFolder}/**"],
+      "defines": ["DEBUG", "USE_HAL_DRIVER", "STM32L053xx"],
+      "compilerPath": "",
+      "cStandard": "c11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
