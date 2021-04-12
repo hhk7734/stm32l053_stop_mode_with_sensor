@@ -9,8 +9,6 @@
 //  Default <address> is 0x5B.
 //
 //****************************************************************************//
-CCS811Core::CCS811Core(uint8_t inputArg)
-    : _i2cAddr(inputArg << 1) {}
 
 CCS811Core::CCS811_Status_e CCS811Core::beginCore(I2C_HandleTypeDef *hi2c) {
     CCS811Core::CCS811_Status_e returnError = CCS811_Stat_SUCCESS;
@@ -141,8 +139,7 @@ CCS811Core::CCS811_Status_e
 //  Construct with same rules as the core ( uint8_t busType, uint8_t inputArg )
 //
 //****************************************************************************//
-CCS811::CCS811(uint8_t inputArg)
-    : CCS811Core(inputArg) {
+CCS811::CCS811() {
     refResistance = 10000;    // Unsupported feature.
     resistance    = 0;        // Unsupported feature.
     temperature   = 0;
@@ -157,8 +154,8 @@ CCS811::CCS811(uint8_t inputArg)
 //  This starts the lower level begin, then applies settings
 //
 //****************************************************************************//
-bool CCS811::begin(I2C_HandleTypeDef *hi2c) {
-    if(beginWithStatus(hi2c) == CCS811_Stat_SUCCESS) return true;
+bool CCS811::begin(I2C_HandleTypeDef *hi2c, uint8_t addr) {
+    if(beginWithStatus(hi2c, addr) == CCS811_Stat_SUCCESS) return true;
     return false;
 }
 
@@ -169,10 +166,13 @@ bool CCS811::begin(I2C_HandleTypeDef *hi2c) {
 //  This starts the lower level begin, then applies settings
 //
 //****************************************************************************//
-CCS811Core::CCS811_Status_e CCS811::beginWithStatus(I2C_HandleTypeDef *hi2c) {
+CCS811Core::CCS811_Status_e CCS811::beginWithStatus(I2C_HandleTypeDef *hi2c,
+                                                    uint8_t            addr) {
     uint8_t data[4] = {0x11, 0xE5, 0x72, 0x8A};    // Reset key
     CCS811Core::CCS811_Status_e returnError
         = CCS811_Stat_SUCCESS;    // Default error state
+
+    _i2cAddr = addr << 1;
 
     // restart the core
     returnError = beginCore(hi2c);

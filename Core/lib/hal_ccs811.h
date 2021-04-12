@@ -2,8 +2,8 @@
 
 #include "main.h"
 
-#define CCS811_ADDR_0 0x5A
-#define CCS811_ADDR_1 0x5B
+#define CCS811_ADDRESS_0 0x5B
+#define CCS811_ADDRESS_1 0x5A
 
 // Register addresses
 #define CSS811_STATUS          0x00
@@ -39,9 +39,6 @@ public:
         CCS811_Stat_GENERIC_ERROR
         //...
     } CCS811_Status_e;
-
-    CCS811Core(uint8_t);
-    ~CCS811Core() = default;
 
     CCS811_Status_e beginCore(I2C_HandleTypeDef *hi2c);
 
@@ -80,12 +77,15 @@ protected:
 
 class CCS811: public CCS811Core {
 public:
-    CCS811(uint8_t);
+    CCS811();
 
     // Call to check for errors, start app, and set default mode 1
-    bool begin(I2C_HandleTypeDef *hi2c);    // Use the Wire hardware by default
+    bool            begin(I2C_HandleTypeDef *hi2c,
+                          uint8_t            addr
+                          = CCS811_ADDRESS_0);    // Use the Wire hardware by default
     CCS811_Status_e beginWithStatus(
-        I2C_HandleTypeDef *hi2c);    // Use the Wire hardware by default
+        I2C_HandleTypeDef *hi2c,
+        uint8_t addr = CCS811_ADDRESS_0);    // Use the Wire hardware by default
     const char *statusString(
         CCS811_Status_e stat
         = CCS811_Stat_NUM);    // Returns a human-readable status message.
